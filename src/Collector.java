@@ -18,4 +18,7 @@ public class Collector extends Person{
     public void collectPayment(){
         System.out.println("Payment collected successfully");
     }
+    public void displayRole() {
+        System.out.println("Collector");
+    }
 }

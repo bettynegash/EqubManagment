@@ -37,6 +37,15 @@ public class MemberService {
             System.out.println("Member not found.");
         }
     }
+    public void searchMember(String name){
+        for (Member member:membersList){
+            if (member.getName().equalsIgnoreCase(name)){
+                System.out.println(member);
+                return;
+            }
+        }
+        System.out.println("Member not found.");
+    }
     public void viewMembers(){
         for (Member m:membersList){
             System.out.println(m);
