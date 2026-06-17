@@ -5,14 +5,17 @@ public class PaymentService {
     public PaymentService(){
         payments=new ArrayList<>();
     }
-    public void recordPayment(Payment payment){
-        if (validatePayment(payment.getAmount())){
+    public void recordPayment(Payment payment,Member member){
+        try{
+            validatePayment(payment.getAmount());
             payments.add(payment);
+            member.setTotalContribution(member.getTotalContribution()+payment.getAmount());
             System.out.println("Payment recorded successfully.");
         }
-        else {
-            System.out.println("Invalid payment amount.");
+        catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
         }
+
     }
     public void viewPayments(){
         for (Payment p:payments){
@@ -28,11 +31,10 @@ public class PaymentService {
         }
         return total;
     }
-    public boolean validatePayment(double amount){
-        if (amount>0){
-            return true;
+    public void validatePayment(double amount){
+        if (amount<=0){
+            throw new IllegalArgumentException("Payment amount must be greater than zero.");
         }
-        return false;
     }
 
     public ArrayList<Payment> getPayments() {

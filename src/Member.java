@@ -30,4 +30,7 @@ public class Member extends Person{
                 +"\nPhone: "+getPhone()+"\nContribution: "+totalContribution
                 +"\nWinner: "+winner;
     }
+    public void displayRole() {
+        System.out.println("Equb Member");
+    }
 }
