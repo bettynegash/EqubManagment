@@ -14,6 +14,13 @@ public class Main {
         Menu menu = new Menu();
 
 
+        CollectorMenu collectorMenu =
+                new CollectorMenu(
+                        menu.memberService,
+                        menu.paymentService
+                );
+
+
         int choice;
 
 
@@ -28,6 +35,7 @@ public class Main {
 
             System.out.println("1. Admin Login");
             System.out.println("2. Member Login");
+            System.out.println("3. Collector Login");
             System.out.println("0. Exit");
 
 
@@ -78,6 +86,18 @@ public class Main {
 
                     menu.memberMenu(id);
 
+
+
+                    break;
+
+
+
+
+
+                case 3:
+
+
+                    collectorMenu.showCollectorMenu();
 
 
                     break;
