@@ -143,7 +143,6 @@ public class Menu {
 
 
 
-
                 case 6:
 
                     System.out.print("Payment ID: ");
@@ -167,11 +166,25 @@ public class Menu {
 
 
                     Payment payment =
-                            new Payment(paymentId,memberId,amount,date);
+                            new Payment(paymentId, memberId, amount, date);
 
 
 
-                    paymentService.recordPayment(payment);
+                    Member paymentMember =
+                            memberService.findMemberById(memberId);
+
+
+
+                    if(paymentMember != null){
+
+                        paymentService.recordPayment(payment, paymentMember);
+
+                    }
+                    else{
+
+                        System.out.println("Member not found.");
+
+                    }
 
 
                     break;
@@ -246,6 +259,7 @@ public class Menu {
 
 
     }
+
 
 
 
