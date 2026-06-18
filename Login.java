@@ -1,134 +1,104 @@
 import java.util.Scanner;
 
-public class Main {
+public class Login {
 
+    Scanner input = new Scanner(System.in);
 
-    static Scanner input = new Scanner(System.in);
 
+    private User admin;
+    private User collector;
 
-    public static void main(String[] args) {
 
 
-        Login login = new Login();
+    public Login() {
 
-        Menu menu = new Menu();
+        admin = new User("admin", "1234", "Admin");
 
+        collector = new User("collector", "5678", "Collector");
 
-        CollectorMenu collectorMenu =
-                new CollectorMenu(
-                        menu.memberService,
-                        menu.paymentService
-                );
+    }
 
 
-        int choice;
 
 
 
-        do {
+    public boolean adminLogin() {
 
 
-            System.out.println("\n==============================");
-            System.out.println("   EQUB MANAGEMENT SYSTEM");
-            System.out.println("==============================");
+        System.out.print("Username: ");
+        String username = input.nextLine();
 
 
-            System.out.println("1. Admin Login");
-            System.out.println("2. Member Login");
-            System.out.println("3. Collector Login");
-            System.out.println("0. Exit");
 
+        System.out.print("Password: ");
+        String password = input.nextLine();
 
-            System.out.print("Choose: ");
 
-            choice = input.nextInt();
 
 
+        if(username.equals(admin.getUsername())
+                && password.equals(admin.getPassword())) {
 
-            switch(choice) {
 
 
+            System.out.println("Admin login successful.");
 
-                case 1:
+            return true;
 
+        }
 
-                    input.nextLine();
 
+        else {
 
-                    boolean success = login.adminLogin();
 
+            System.out.println("Wrong admin username or password.");
 
+            return false;
 
-                    if(success){
+        }
 
+    }
 
-                        menu.adminMenu();
 
 
-                    }
 
 
-                    break;
 
 
+    public boolean collectorLogin() {
 
 
+        System.out.print("Username: ");
+        String username = input.nextLine();
 
-                case 2:
 
 
-                    System.out.print("Enter Member ID: ");
+        System.out.print("Password: ");
+        String password = input.nextLine();
 
 
-                    int id = input.nextInt();
 
 
+        if(username.equals(collector.getUsername())
+                && password.equals(collector.getPassword())) {
 
-                    menu.memberMenu(id);
 
 
+            System.out.println("Collector login successful.");
 
-                    break;
+            return true;
 
+        }
 
 
+        else {
 
 
-                case 3:
+            System.out.println("Wrong collector username or password.");
 
+            return false;
 
-                    collectorMenu.showCollectorMenu();
-
-
-                    break;
-
-
-
-
-
-                case 0:
-
-
-                    System.out.println("System closed.");
-
-                    break;
-
-
-
-
-
-                default:
-
-
-                    System.out.println("Invalid choice.");
-
-            }
-
-
-
-        }while(choice != 0);
-
-
+        }
 
     }
 
