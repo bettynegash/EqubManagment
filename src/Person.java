@@ -34,4 +34,7 @@ public class Person {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    public void displayRole(){
+        System.out.println("General Person");
+    }
 }
