@@ -72,4 +72,4 @@ System Access Demo Credentials;
 
 Administrative Access Console: Username: admin | Password: 1234
 
-Field Collector Access Console: Username
+Field Collector Access Console: Username : collector | password:5678
