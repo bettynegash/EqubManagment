@@ -14,6 +14,16 @@ public class Member extends Person{
         this.nationality="";
 
     }
+    public Member(int id,String name,String phone,double totalContribution,boolean winner
+                  ){
+        super(id,name,phone);
+        this.totalContribution=totalContribution;
+        this.winner=winner;
+        this.prizeWon=0;
+        this.equbType="Student";
+        this.nationalId="";
+        this.nationality="";
+    }
 
     public Member(int id,String name,String phone,double totalContribution,boolean winner,
                   String nationalId,String nationality){
@@ -22,8 +32,8 @@ public class Member extends Person{
         this.winner=winner;
         this.prizeWon=0;
         this.equbType="Student";
-        this.nationalId="";
-        this.nationality="";
+        this.nationalId=nationalId;
+        this.nationality=nationality;
     }
 
     public String getNationalId() {
@@ -75,7 +85,8 @@ public class Member extends Person{
     }
 
     public String toString(){
-        return"ID: "+getId()+"\nName: "+getName()
+        return"ID: "+getId()+
+                "\nName: "+getName()
                 +"\nPhone: "+getPhone()+
                 "\nNational ID: "+nationalId+
                 "\nNationality: "+nationality+
