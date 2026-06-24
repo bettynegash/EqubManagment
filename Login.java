@@ -97,10 +97,6 @@ public class Login {
             System.out.println("Wrong collector username or password.");
 
             return false;
-
         }
-
     }
-
-
 }
