@@ -1,25 +1,23 @@
 import java.util.Scanner;
 
 public class Menu {
-
     Scanner input = new Scanner(System.in);
-
 
     MemberService memberService = new MemberService();
     PaymentService paymentService = new PaymentService();
     Equb equb = new Equb("Community Equb");
 
-
+    // Constructor to sync DB-loaded members into the Equb logic pool instantly
+    public Menu() {
+        for (Member m : memberService.getMembers()) {
+            equb.addMember(m);
+        }
+    }
 
     public void adminMenu() {
-
-
         int choice;
 
-
         do {
-
-
             System.out.println("\n========== ADMIN MENU ==========");
             System.out.println("1. Add Member");
             System.out.println("2. View Members");
@@ -30,244 +28,159 @@ public class Menu {
             System.out.println("7. Total Contribution");
             System.out.println("0. Logout");
 
-
             System.out.print("Choose: ");
-
             choice = input.nextInt();
 
-
-
             switch(choice) {
-
-
-
                 case 1:
+                    input.nextLine(); 
+                    int id;
+                    
+                    while (true) {
+                        System.out.print("ID: ");
+                        id = input.nextInt();
+                        if(memberService.findMemberById(id) == null){
+                            break;
+                        }
+                        System.out.println("❌ Registration Denied: Member ID already exists. Please input a unique ID.");
+                    }
 
-
-                    input.nextLine();
-
-
-                    System.out.print("ID: ");
-                    int id = input.nextInt();
-
-
-                    input.nextLine();
-
-
+                    input.nextLine(); 
                     System.out.print("Name: ");
                     String name = input.nextLine();
-
 
                     System.out.print("Phone: ");
                     String phone = input.nextLine();
 
+                    System.out.print("National ID: ");
+                    String nationalId = input.nextLine();
 
+                    System.out.print("Nationality: ");
+                    String nationality = input.nextLine();
 
-                    Member member =
-                            new Member(id,name,phone,0,false);
+                    System.out.println("Select Equb Type:");
+                    System.out.println("1. Student Equb (Min: 100 Birr)\n2. Worker Equb (Min: 100 Birr)\n3. Merchant Equb (Min: 1000 Birr)");
+                    System.out.print("Choice: ");
+                    int typeChoice = input.nextInt();
+                    
+                    String equbType = "Student";
+                    double limit = 100.0;
+                    if (typeChoice == 2) { equbType = "Worker"; }
+                    else if (typeChoice == 3) { equbType = "Merchant"; limit = 1000.0; }
 
+                    double initialDeposit = 0;
+                    while (true) {
+                        System.out.print("Enter Initial Deposit (Minimum " + limit + " Birr): ");
+                        initialDeposit = input.nextDouble();
+                        if (initialDeposit >= limit) {
+                            break;
+                        }
+                        System.out.println("❌ Invalid Amount: Minimum requirement for " + equbType + " is " + limit + " Birr.");
+                    }
 
+                    Member member = new Member(id, name, phone, initialDeposit, false, nationalId, nationality);
+                    member.setEqubType(equbType);
 
                     memberService.addMember(member);
                     equb.addMember(member);
-
-
+                    DBconnection.addMember(member); 
 
                     System.out.println("Member added successfully.");
-
                     break;
-
-
-
-
 
                 case 2:
-
-
                     memberService.viewMembers();
-
                     break;
-
-
-
-
 
                 case 3:
-
-
                     System.out.print("Enter ID: ");
-
                     int searchId = input.nextInt();
-
-
                     memberService.searchMember(searchId);
-
-
                     break;
-
-
-
 
 
                 case 4:
-
-
                     System.out.print("Member ID: ");
-
                     int updateId = input.nextInt();
-
-
                     input.nextLine();
-
-
                     System.out.print("New Phone: ");
-
                     String newPhone = input.nextLine();
 
-
-
-                    memberService.updateMember(updateId,newPhone);
-
-
-
+                    memberService.updateMember(updateId, newPhone);
                     System.out.println("Member updated.");
-
-
                     break;
-
-
-
-
 
                 case 5:
-
-
                     System.out.print("Member ID: ");
-
                     int deleteId = input.nextInt();
-
-
-
                     memberService.deleteMember(deleteId);
-
                     equb.removeMember(deleteId);
-
-
-
                     System.out.println("Member deleted.");
-
-
                     break;
-
-
-
-
 
                 case 6:
-
-
                     Member winner = equb.selectWinner();
 
-
-
                     if(winner != null){
+                        double prize = equb.calculateTotal();
+                        winner.setPrizeWon(prize);
 
-
-                        System.out.println("Winner:");
-
-                        System.out.println(winner);
-
-
+                        System.out.println("\n===== WINNER RESULT =====");
+                        System.out.println("Winner Name: " + winner.getName());
+                        System.out.println("Member ID: " + winner.getId());
+                        System.out.println("Total Pool Value Won: " + prize + " Birr");
                     }
-
                     else{
-
-
-                        System.out.println("No members.");
-
-
+                        System.out.println("No eligible members left or everyone has already won.");
                     }
-
-
                     break;
-
-
-
-
 
                 case 7:
-
-
-                    System.out.println(
-                            "Total Contribution: "
-                            + equb.calculateTotal()
-                    );
-
-
+                    System.out.println("Total Contribution: " + equb.calculateTotal());
                     break;
-
-
-
-
 
                 case 0:
-
-
                     System.out.println("Logout.");
-
-
                     break;
 
-
-
-
-
                 default:
-
-
                     System.out.println("Invalid choice.");
-
             }
-
-
-
-        }while(choice != 0);
-
-
-
+        } while(choice != 0);
     }
-
-
-
-
-
-
 
     public void memberMenu(int id) {
-
-
         Member member = memberService.findMemberById(id);
 
-
-
         if(member != null){
-
-
+            System.out.println("\n===== YOUR INFORMATION =====");
             System.out.println(member);
 
-
+            if(member.isWinner()){
+                System.out.println("\n🎉 Congratulations! You have won the Equb draw round!");
+                System.out.println("Total Received: " + member.getPrizeWon() + " Birr");
+            }
+            else{
+                System.out.println("\n❌ Draw Status: You did not win this round. Keep contributing!");
+                System.out.println("\n===== CURRENT ACTIVE WINNER =====");
+                
+                boolean winnerFound = false;
+                for(Member m : equb.getMembers()){
+                    if(m.isWinner()){
+                        System.out.println("Winner Name: " + m.getName());
+                        System.out.println("Winner ID: " + m.getId());
+                        System.out.println("Prize Amount: " + m.getPrizeWon() + " Birr");
+                        winnerFound = true;
+                        break;
+                    }
+                }
+                if(!winnerFound){
+                    System.out.println("No winner selected yet for this group rotation.");
+                }
+            }
         }
-
         else{
-
-
             System.out.println("Member not found.");
-
-
         }
-
-
     }
-
-
 }
