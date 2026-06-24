@@ -4,42 +4,73 @@ import java.util.Random;
 public class Equb {
     private String equbName;
     private ArrayList<Member> members;
+
     public Equb(String equbName){
-        this.equbName=equbName;
-        members=new ArrayList<>();
+        this.equbName = equbName;
+        members = new ArrayList<>();
     }
+
+    // Public Getter (Fixes the unused field compilation warning)
+    public String getEqubName() {
+        return equbName;
+    }
+
     public void addMember(Member member){
         members.add(member);
     }
-    public void removeMember(int id){
-        for (Member m:members){
-            if (m.getId()==id){
-                members.remove(m);
-                break;
-            }
-        }
-    }
+
     public void showMembers(){
-        for (Member m:members){
+        for (Member m : members){
             System.out.println(m);
         }
     }
+
+    public void removeMember(int id){
+        Member memberToRemove = null;
+        for(Member m : members){
+            if(m.getId() == id){
+                memberToRemove = m;
+                break;
+            }
+        }
+        if(memberToRemove != null){
+            members.remove(memberToRemove);
+        }
+    }
+
     public Member selectWinner(){
-        if (members.isEmpty()){
+        ArrayList<Member> availableMembers = new ArrayList<>();
+        for(Member m : members){
+            if(!m.isWinner()){
+                availableMembers.add(m);
+            }
+        }
+
+        if(availableMembers.isEmpty()){
             return null;
         }
-        Random random=new Random();
-        int index= random.nextInt(members.size());
-        Member winner=members.get(index);
+
+        Random random = new Random();
+        int index = random.nextInt(availableMembers.size());
+        Member winner = availableMembers.get(index);
         winner.setWinner(true);
         return winner;
     }
+
     public double calculateTotal(){
-        double total=0;
-        for (Member m:members){
-            total+=m.getTotalContribution();
+        double total = 0;
+        for (Member m : members){
+            total += m.getTotalContribution();
         }
         return total;
+    }
+
+    public void startNewRound(){
+        for(Member m : members){
+            m.setTotalContribution(0);
+            m.setWinner(false);
+        }
+        System.out.println("New Equb round started.");
     }
 
     public ArrayList<Member> getMembers() {

@@ -1,7 +1,9 @@
 public class Person {
+    //to encapsulate our data
     private int id;
     private String name;
     private String phone;
+// allow to create person and fill it later
     public Person(){
 
     }

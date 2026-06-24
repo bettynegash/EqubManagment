@@ -1,58 +1,68 @@
 import java.util.ArrayList;
 
 public class MemberService {
-    private ArrayList<Member> membersList;
-    public MemberService(){
-        membersList=new ArrayList<>();
-    }
-    public void addMember(Member member){
-        membersList.add(member);
-    }
-    public void deleteMember(int id){
-        Member member=findMemberById(id);
-        if (member!=null){
-            membersList.remove(member);
+    private ArrayList<Member> members;
+
+    public MemberService() {
+        // Automatically fetch records from DB on startup
+        this.members = DBconnection.getMembers();
+        if (this.members == null) {
+            this.members = new ArrayList<>();
         }
     }
-    public Member findMemberById(int id){
-        for (Member m:membersList){
-            if (m.getId()==id){
+
+    public Member findMemberById(int id) {
+        for (Member m : members) {
+            if (m.getId() == id) {
                 return m;
             }
         }
         return null;
     }
-    public void updateMember(int id,String newPhone){
-        Member member=findMemberById(id);
-        if (member!=null){
-            member.setPhone(newPhone);
-        }
+
+    public void addMember(Member member) {
+        members.add(member);
     }
-    public void searchMember(int id){
-        Member member=findMemberById(id);
-        if (member!=null){
-            System.out.println(member);
+
+    public void viewMembers() {
+        if (members.isEmpty()) {
+            System.out.println("No members registered yet.");
+            return;
         }
-        else {
-            System.out.println("Member not found.");
-        }
-    }
-    public void searchMember(String name){
-        for (Member member:membersList){
-            if (member.getName().equalsIgnoreCase(name)){
-                System.out.println(member);
-                return;
-            }
-        }
-        System.out.println("Member not found.");
-    }
-    public void viewMembers(){
-        for (Member m:membersList){
+        System.out.println("\n========== ALL MEMBERS ==========");
+        for (Member m : members) {
             System.out.println(m);
+            System.out.println("---------------------------------");
         }
     }
 
-    public ArrayList<Member> getMembersList() {
-        return membersList;
+    public void searchMember(int id) {
+        Member m = findMemberById(id);
+        if (m != null) {
+            System.out.println("\n========== MEMBER FOUND ==========");
+            System.out.println(m);
+        } else {
+            System.out.println("❌ Member with ID " + id + " not found.");
+        }
+    }
+
+    public void updateMember(int id, String newPhone) {
+        Member m = findMemberById(id);
+        if (m != null) {
+            m.setPhone(newPhone);
+        } else {
+            System.out.println("❌ Member not found.");
+        }
+    }
+
+    public void deleteMember(int id) {
+        Member m = findMemberById(id);
+        if (m != null) {
+            members.remove(m);
+        }
+    }
+
+    public ArrayList<Member> getMembers() {
+        return members;
     }
 }
