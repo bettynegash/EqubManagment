@@ -2,13 +2,22 @@ public class Payment {
     private int paymentId;
     private int memberId;
     private double amount;
-    private String paymentDate;
-    public Payment(){}
-    public Payment(int paymentId,int memberId,double amount,String paymentDate){
-        this.paymentId=paymentId;
-        this.memberId=memberId;
-        this.amount=amount;
-        this.paymentDate=paymentDate;
+    private String date;
+
+    public Payment() {
+    }
+
+    public Payment(int memberId, double amount, String date) {
+        this.memberId = memberId;
+        this.amount = amount;
+        this.date = date;
+    }
+
+    public Payment(int paymentId, int memberId, double amount, String date) {
+        this.paymentId = paymentId;
+        this.memberId = memberId;
+        this.amount = amount;
+        this.date = date;
     }
 
     public int getPaymentId() {
@@ -35,17 +44,12 @@ public class Payment {
         this.amount = amount;
     }
 
-    public String getPaymentDate() {
-        return paymentDate;
+    public String getDate() {
+        return date;
     }
 
-    public void setPaymentDate(String paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-    public String toString(){
-        return "Payment ID: "+paymentId+
-                "\nMember ID: "+memberId+
-                "\nAmount: "+amount+
-                "\nDate: "+paymentDate;
+    public void setDate(String paymentDate) {
+        this.date = date;
     }
 }
+
