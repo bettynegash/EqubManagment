@@ -11,7 +11,7 @@ public class Menu {
 
     public Menu() {
 
-        for (Member m : memberService.getMembers()) {
+        for (Member m : memberService.getMembersList()) {
 
             equb.addMember(m);
 
